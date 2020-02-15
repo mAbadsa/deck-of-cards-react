@@ -1,17 +1,23 @@
 import React from "react";
 import axios from "axios";
+import Card from "./Card";
+import "./Deck.css";
 const API_BASE_URL = "https://deckofcardsapi.com/api/deck/";
 
 class Deck extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { deck: null, drawn: [] };
+    this.state = { deck: null, drawn: [], isLoaded: false };
     this.getCard = this.getCard.bind(this);
   }
 
   async componentDidMount() {
     const deck = await axios.get(`${API_BASE_URL}/new/shuffle`);
-    this.setState({ deck: deck.data });
+    if (!deck) {
+      this.setState(st => ({ isLoaded: !st.isLoaded }));
+    } else {
+      this.setState({ deck: deck.data });
+    }
   }
 
   async getCard() {
@@ -37,16 +43,27 @@ class Deck extends React.Component {
       });
       console.log(cardRes.data);
     } catch (error) {
-        alert(error)
+      alert(error);
     }
   }
 
   render() {
+    const cards = this.state.drawn.map(card => {
+      return <Card key={card.id} image={card.image} name={card.name} />;
+    });
     return (
       <div>
         <h1>Card Dealer</h1>
-        <button onClick={this.getCard}>Get Card!</button>
-        {/* <img src={this.state.drawn[0].image} alt="card"/> */}
+        {!this.state.isLoaded ? (
+          <div className="Deck">
+            <button onClick={this.getCard}>Get Card!</button>
+            <div className="Deck-cardarea">{cards}</div>
+          </div>
+        ) : (
+          <div className="Deck">
+            <p>Loading...</p>
+          </div>
+        )}
       </div>
     );
   }
