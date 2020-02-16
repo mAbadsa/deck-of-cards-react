@@ -41,7 +41,6 @@ class Deck extends React.Component {
           ]
         };
       });
-      console.log(cardRes.data);
     } catch (error) {
       alert(error);
     }
@@ -53,10 +52,11 @@ class Deck extends React.Component {
     });
     return (
       <div>
-        <h1>Card Dealer</h1>
+        <h1 className="Deck-title"><span role="img" aria-label="1">🔶</span> Card Dealer <span role="img" aria-label="2">🔶</span></h1>
+        <h2 className="Deck-title subtitle"><span role="img" aria-label="3">🔶</span> A little demo made with React <span role="img" aria-label="4">🔶</span></h2>
         {!this.state.isLoaded ? (
           <div className="Deck">
-            <button onClick={this.getCard}>Get Card!</button>
+            <button className="Deck-btn" onClick={this.getCard}>Get Card!</button>
             <div className="Deck-cardarea">{cards}</div>
           </div>
         ) : (
